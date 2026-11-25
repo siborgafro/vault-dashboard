@@ -1,0 +1,38 @@
+# Demo config for example-vault/. Paths are relative to the vault folder.
+[dashboard]
+title = "Saffron & Spoon"
+language = "en"
+
+[threads]
+file = "meta/Threads.md"
+
+[sessions]
+file = "meta/Last-Session.md"
+limit = 3
+
+[tasks]
+folder = "tasks"
+
+[receipts]
+folder = "log"
+
+[schedule]
+file = "projects/saffron-channel/Schedule.md"
+heading = "Schedule"
+
+[pipeline]
+root = "projects/saffron-channel/episodes"
+title = "Episode pipeline"
+published_sources = ["projects/saffron-channel/Channel.md"]
+published_url_regex = 'https://youtu\.be/[\w-]+'
+
+[pipeline.stages]
+Research = "Sources.md"
+Script = "Script.md"
+Visuals = ["Shots.md", "Visuals.md"]
+Edit = ["Edit.md", "*.mp4"]
+Shorts = "Shorts.md"
+Package = "Package.md"
+
+[projects]
+folder = "projects"

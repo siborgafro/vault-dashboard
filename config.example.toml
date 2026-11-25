@@ -1,0 +1,74 @@
+# Save as <vault>/dashboard.toml (picked up automatically) or pass --config FILE.
+# Every key is optional; anything left out uses the built-in default shown here.
+# Paths are relative to the vault folder. Set a path to "" to switch that source off.
+# A tab or summary section hides itself when its source is not set or does not exist.
+
+[dashboard]
+title = "Vault dashboard"
+language = "en"               # "en" or "tr"; the page also has a toggle (remembered in a cookie)
+host = "127.0.0.1"            # keep it local: the dashboard shows your notes
+port = 8767
+
+# Topics tab: bullets under headings, "- **Title:** text ... 2026-01-31 ... Next: what comes next"
+[threads]
+file = "Threads.md"
+active_headings = ["Active"]              # a heading containing one of these starts the active list
+closed_headings = ["Closed", "Done"]
+waiting_keywords = ["waiting", "blocked", "on hold"]   # marks a topic as waiting
+next_markers = ["Next", "Open", "Remaining"]           # "Next: ..." is highlighted on the card
+
+# Summary: recent sessions. One "## heading" block per session, newest first.
+[sessions]
+file = "Last-Session.md"
+limit = 3
+
+# Summary: open tasks. One Markdown file per task, front matter as JSON or key: value:
+#   title, status, project, due (or due_at)
+[tasks]
+folder = "tasks"
+done_statuses = ["done", "cancelled", "canceled", "closed"]
+
+# Summary + Activity: one Markdown file per event. Front matter holds a timestamp and the
+# notes it touched, the body is the one-line summary:
+#   {"created_at": "2026-01-31T18:30:00+00:00", "refs": ["projects/blog/Post.md"]}
+[receipts]
+folder = "receipts"
+time_key = "created_at"
+refs_key = "refs"
+limit = 300                   # events shown on the Activity tab
+
+# Summary: upcoming rows of the first Markdown table under a heading in this file.
+# Only rows whose last date is today or later are shown (ISO dates, "Nov 30", "30 Nov",
+# Turkish month names; rows without a date are kept). Off by default.
+[schedule]
+file = ""                     # e.g. "projects/blog/Schedule.md"
+heading = "Schedule"
+limit = 6
+
+# Pipeline tab: every sub-folder of `root` is one item (a video, an article, a release).
+# A stage is done when a file with one of the listed names exists in that folder
+# (case-insensitive, "*" wildcards allowed). Off by default.
+[pipeline]
+root = ""                     # e.g. "projects/blog/posts"
+title = ""                    # tab title, default "Pipeline"
+published_keywords = ["published", "live"]   # a line naming the item + one of these = published
+published_url_regex = ""      # or a line naming the item + a match, e.g. 'https://youtu\.be/[\w-]+'
+published_sources = []        # files to scan; default: threads file, schedule file, root/*.md
+
+[pipeline.stages]             # stage name = file name(s); replaces the defaults below
+Research = "Sources.md"
+Script = "Script.md"
+Visuals = "Visuals.md"
+Edit = ["Edit.md", "*.mp4"]
+Shorts = "Shorts.md"
+Package = "Package.md"
+
+# Projects tab: each sub-folder is a project; events whose refs start with
+# "<folder>/<project>/" count towards it.
+[projects]
+folder = "projects"
+
+# Vault search skips these folder names (and every folder starting with a dot).
+[search]
+exclude = ["receipts", "Archive", ".git", ".obsidian"]
+max_results = 80
