@@ -27,6 +27,9 @@ STRINGS = {
         "not_found": "Not found", "note_not_found": "Note not found", "folder_not_found": "Folder not found",
         "forbidden": "Refused: path is outside the vault or not a Markdown note.",
         "not_available": "This section is not configured or its source is missing.",
+        "nav_label": "Sections", "aside_label": "Tasks and recent activity",
+        "lang_label": "Türkçe", "stage_yes": "done", "stage_no": "missing",
+        "footer": "Local dashboard · reads the vault, never writes to it",
         "search": "Search", "n_results": "{n} results", "error": "Error",
     },
     "tr": {
@@ -49,6 +52,9 @@ STRINGS = {
         "not_found": "Bulunamadı", "note_not_found": "Not bulunamadı", "folder_not_found": "Klasör bulunamadı",
         "forbidden": "Reddedildi: yol kasanın dışında ya da Markdown notu değil.",
         "not_available": "Bu bölüm yapılandırılmamış ya da kaynağı yok.",
+        "nav_label": "Bölümler", "aside_label": "Görevler ve son işler",
+        "lang_label": "English", "stage_yes": "var", "stage_no": "yok",
+        "footer": "Yerel panel · kasayı yalnız okur, hiçbir şey yazmaz",
         "search": "Ara", "n_results": "{n} sonuç", "error": "Hata",
     },
 }

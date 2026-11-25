@@ -11,55 +11,84 @@ from .i18n import MONTHS, tr
 from .markdown import esc, inline, render
 
 CSS = """
-:root{color-scheme:dark light;--bg:#0f1115;--card:#171a21;--card2:#1d212a;--line:#2a2f3a;--text:#e6e8ec;
---dim:#8b93a3;--accent:#e0b04a;--green:#4cc38a;--red:#e5605a;--blue:#5aa2e5}
-@media(prefers-color-scheme:light){:root{--bg:#f6f7f9;--card:#fff;--card2:#eef0f4;--line:#dcdfe6;--text:#1c2029;
---dim:#667085;--accent:#a56d00;--green:#13804f;--red:#c0362f;--blue:#1f6fbf}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);
-font:14px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
-.top{display:flex;gap:4px;align-items:center;padding:10px 20px;border-bottom:1px solid var(--line);
-position:sticky;top:0;background:var(--bg);z-index:5;flex-wrap:wrap}
-.logo{font-weight:700;margin-right:18px;color:var(--accent)}
-.top a.t{color:var(--dim);padding:6px 12px;border-radius:8px}
-.top a.t.on,.top a.t:hover{background:var(--card2);color:var(--text);text-decoration:none}
+/* Accent: deep teal #0F766E (light) / #2DD4BF (dark). Display: Bricolage Grotesque, body: Inter; both used only
+   if installed locally, since the CSP blocks external requests. */
+:root{--bg:#F8FAFC;--card:#FFFFFF;--card2:#F1F5F9;--line:#E2E8F0;--text:#0F172A;--dim:#475569;--faint:#94A3B8;
+--accent:#0F766E;--on-accent:#FFFFFF;--band:#1E293B;--band-text:#F8FAFC;--band-dim:#CBD5E1;
+--green:#15803D;--red:#B91C1C;--warn:#B45309;--r-s:6px;--r-card:8px}
+@media(prefers-color-scheme:dark){:root{--bg:#0F172A;--card:#172033;--card2:#1E293B;--line:#283548;--text:#F1F5F9;
+--dim:#94A3B8;--faint:#475569;--accent:#2DD4BF;--on-accent:#0F172A;--band:#0B1120;--band-text:#F1F5F9;
+--band-dim:#94A3B8;--green:#4ADE80;--red:#F87171;--warn:#FBBF24}}
+*{box-sizing:border-box}html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.55 Inter,"Segoe UI",system-ui,sans-serif}
+b,strong{font-weight:600}
+h1,h2,h3{font-family:"Bricolage Grotesque",Inter,"Segoe UI",sans-serif;font-weight:600;letter-spacing:-.01em}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.band{background:var(--band);color:var(--band-text);border-bottom:1px solid var(--line)}
+.band-in{max-width:1440px;margin:0 auto;padding:12px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.logo{font-family:"Bricolage Grotesque",Inter,sans-serif;font-weight:600;font-size:20px;color:var(--band-text);margin-right:8px}
+.logo:hover{text-decoration:none}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav a.t{color:var(--band-dim);padding:6px 10px;border-radius:var(--r-s);font-size:14px}
+nav a.t:hover{color:var(--band-text);background:rgba(255,255,255,.08);text-decoration:none}
+nav a.t.on{color:var(--band-text);box-shadow:inset 0 -2px 0 var(--accent)}
 .right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.right input{background:var(--card);border:1px solid var(--line);color:var(--text);padding:6px 10px;
-border-radius:8px;width:200px}
-.lang{border:1px solid var(--line);border-radius:8px;padding:5px 10px;color:var(--dim)}
-main{max-width:1200px;margin:0 auto;padding:22px 20px 60px}
-h1{font-size:20px;margin:4px 0 18px}h2{font-size:15px;margin:26px 0 10px;color:var(--dim);
-text-transform:uppercase;letter-spacing:.06em}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.card h3{margin:0 0 6px;font-size:15px}.card p{margin:6px 0;color:var(--dim)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.stat b{display:block;font-size:26px}.stat span{color:var(--dim)}
-.badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:var(--card2);
-color:var(--dim);border:1px solid var(--line);margin-right:4px}
-.badge.g{color:var(--green)}.badge.a{color:var(--accent)}
-.next{color:var(--text)!important;border-left:3px solid var(--accent);padding-left:8px}
-.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;background:var(--card);border-radius:12px;overflow:hidden}
-th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{color:var(--dim);font-weight:600;font-size:12px;background:var(--card2)}
-td.ok{color:var(--green);text-align:center}td.no{color:var(--dim);opacity:.5;text-align:center}
-.feed{border-left:2px solid var(--line);margin-left:6px}
-.event{position:relative;padding:0 0 14px 18px}.event:before{content:"";position:absolute;left:-6px;top:6px;
-width:10px;height:10px;border-radius:50%;background:var(--accent)}
-.event small{color:var(--dim)}.day{margin:18px 0 8px;color:var(--dim);font-weight:600}
-.note{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 24px 20px}
-.note h2{color:var(--text);text-transform:none;letter-spacing:0;font-size:20px}
-.note h3{font-size:16px}.note pre{background:var(--bg);padding:12px;border-radius:8px;overflow:auto}
+.right input{font:inherit;font-size:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+color:var(--band-text);padding:6px 10px;border-radius:var(--r-s);width:240px}
+.right input::placeholder{color:var(--band-dim)}
+.lang{border:1px solid rgba(255,255,255,.16);border-radius:var(--r-s);padding:5px 10px;color:var(--band-dim);font-size:13px;font-weight:500}
+.lang:hover{color:var(--band-text);text-decoration:none;border-color:var(--accent)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+main{max-width:1280px;margin:0 auto;padding:24px 24px 48px}
+main.narrow{max-width:880px}
+h1{font-size:28px;margin:4px 0 18px}
+h2{font-size:19px;margin:32px 0 12px}
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:0 32px}
+@media(min-width:1100px){.split{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:16px;display:flex;gap:8px;align-items:center}.card p{margin:6px 0;color:var(--dim)}
+.card h3 svg{flex:none;color:var(--dim)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);
+border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}
+.stat{background:var(--card);padding:14px 18px}
+.stat b{display:block;font-size:32px;line-height:1.15;font-variant-numeric:tabular-nums}.stat span{color:var(--dim);font-size:13px}
+.badge{display:inline-block;font-size:12px;font-weight:500;padding:1px 8px;border-radius:999px;background:var(--card2);
+color:var(--dim);border:1px solid var(--line);margin:2px 4px 2px 0}
+a.badge:hover{border-color:var(--accent);text-decoration:none}
+.badge.g{color:var(--green)}.badge.a{color:var(--warn)}
+.next{color:var(--text)!important;background:var(--card2);border-radius:var(--r-s);padding:6px 10px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-card)}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+th,td{padding:8px 12px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--dim);font-weight:500;font-size:12px;background:var(--card2);border-top:0}
+table.schedule td:first-child{white-space:nowrap}table.schedule td:nth-child(2){min-width:160px}
+td.ok,td.no{position:relative}td.ok{color:var(--green);text-align:center}td.no{color:var(--faint);text-align:center}
+.feed{border-left:2px solid var(--line);margin-left:4px}
+.event{position:relative;padding:0 0 14px 18px}.event:before{content:"";position:absolute;left:-5px;top:7px;
+width:8px;height:8px;border-radius:999px;background:var(--accent)}
+.event small{color:var(--dim);font-variant-numeric:tabular-nums}.day{margin:20px 0 8px;color:var(--dim);font-weight:600}
+.note{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:8px 28px 24px}
+.note h1{margin-top:16px}.note h2{font-size:20px}.note h3{font-size:16px}
+.note p,.note li{max-width:75ch}
+.note pre{background:var(--card2);padding:12px;border-radius:var(--r-s);overflow:auto}
 .note blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--line);color:var(--dim)}
-code{background:var(--card2);padding:1px 5px;border-radius:4px;font-size:12.5px}
-.path{color:var(--dim);font-size:12px;margin-bottom:10px}
-.bar{height:6px;background:var(--card2);border-radius:3px;overflow:hidden;margin-top:8px}
+code{background:var(--card2);padding:1px 5px;border-radius:4px;font:12.5px Consolas,"Cascadia Mono",ui-monospace,monospace}
+.path{color:var(--dim);font-size:13px;margin:0 0 12px}
+.bar{height:6px;background:var(--card2);border-radius:999px;overflow:hidden;margin-top:8px}
 .bar i{display:block;height:100%;background:var(--accent)}
 .filter{margin:0 0 14px;display:flex;gap:6px;flex-wrap:wrap}
-@media(max-width:640px){.right{margin-left:0;width:100%}.right input{width:100%}}
+footer{max-width:1280px;margin:0 auto;padding:16px 24px 28px;color:var(--dim);font-size:12px;border-top:1px solid var(--line)}
+@media(max-width:640px){.band-in,main,footer{padding-left:16px;padding-right:16px}.right{margin-left:0;width:100%}
+.right form{flex:1}.right input{width:100%}.note{padding:4px 16px 16px}}
+@media(prefers-reduced-motion:no-preference){nav a.t,a.badge,.lang{transition:background-color 150ms,border-color 150ms,color 150ms}}
 """
 
+FOLDER_SVG = ('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+              '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>')
 LOOPBACK = {"127.0.0.1", "localhost", "::1", "[::1]"}
 
 
@@ -106,24 +135,31 @@ def folder_link(path: str) -> str:
     return "/folder?path=" + quote(path)
 
 
-def layout(c: Ctx, title: str, body: str, active: str = "") -> str:
-    nav = "".join(f'<a class="t{" on" if href == active else ""}" href="{href}">{esc(label)}</a>'
+def layout(c: Ctx, title: str, body: str, active: str = "", narrow: bool = False) -> str:
+    nav = "".join(f'<a class="t{" on" if href == active else ""}" href="{href}"'
+                  f'{" aria-current=page" if href == active else ""}>{esc(label)}</a>'
                   for href, label, on in c.nav() if on)
     name = esc(c.cfg["dashboard"]["title"])
+    other = "tr" if c.lang == "en" else "en"
+    cls = ' class="narrow"' if narrow else ""
     return f"""<!doctype html><html lang="{c.lang}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} · {name}</title>
-<style>{CSS}</style></head><body><div class="top"><span class="logo">◆ {name}</span>{nav}
-<div class="right"><form action="/search"><input name="q" placeholder="{esc(c.t('search_ph'))}"></form>
-<a class="lang" href="{esc(c.lang_url())}">{c.t('lang_other')}</a></div></div>
-<main>{body}</main></body></html>"""
+<style>{CSS}</style></head><body><header class="band"><div class="band-in"><a class="logo" href="/">{name}</a>
+<nav aria-label="{esc(c.t('nav_label'))}">{nav}</nav>
+<div class="right"><form action="/search" role="search"><label class="sr" for="q">{esc(c.t('search'))}</label>
+<input id="q" name="q" placeholder="{esc(c.t('search_ph'))}"></form>
+<a class="lang" href="{esc(c.lang_url())}" hreflang="{other}" aria-label="{esc(c.t('lang_label'))}">{c.t('lang_other')}</a></div></div></header>
+<main{cls}>{body}</main>
+<footer>{esc(c.t('footer'))} · vault-dashboard {__version__}</footer></body></html>"""
 
 
-def table(rows: list[list[str]]) -> str:
+def table(rows: list[list[str]], cls: str = "") -> str:
     if not rows:
         return ""
     head = "".join(f"<th>{inline(h)}</th>" for h in rows[0])
     body = "".join("<tr>" + "".join(f"<td>{inline(h)}</td>" for h in r) + "</tr>" for r in rows[1:])
-    return f'<div class="tw"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
+    attr = f' class="{cls}"' if cls else ""
+    return f'<div class="tw"><table{attr}><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
 def clip(s: str, n: int) -> str:
@@ -159,17 +195,18 @@ def page_summary(c: Ctx) -> tuple[int, str]:
     if stats:
         parts.append('<div class="stats">' + "".join(
             f'<div class="stat"><b>{n}</b><span>{esc(label)}</span></div>' for n, label in stats) + "</div>")
+    main_col, side = [], []
     if f["schedule"]:
         rows = v.upcoming_schedule()
         if rows:
             head = v.schedule()[0]
-            parts.append(f'<h2>{c.t("sec_schedule")}</h2>' + table([head] + rows[:c.cfg["schedule"]["limit"]])
+            main_col.append(f'<h2>{c.t("sec_schedule")}</h2>' + table([head] + rows[:c.cfg["schedule"]["limit"]], "schedule")
                          + f'<p class="path"><a href="{esc(note_link(c.cfg["schedule"]["file"]))}">{c.t("full_table")}</a></p>')
     if f["sessions"]:
         cards = "".join(f'<div class="card"><h3>{esc(h)}</h3><p>{inline(clip(b, 420))}</p></div>'
                         for h, b in v.sessions())
         if cards:
-            parts.append(f'<h2>{c.t("sec_sessions")}</h2><div class="grid">{cards}</div>')
+            main_col.append(f'<h2>{c.t("sec_sessions")}</h2><div class="stack">{cards}</div>')
     if f["tasks"]:
         cards = "".join(
             f'<div class="card"><h3><a href="{esc(note_link(t["path"]))}">{esc(t["title"])}</a></h3>'
@@ -177,12 +214,17 @@ def page_summary(c: Ctx) -> tuple[int, str]:
             + f'<span class="badge a">{esc(t["status"])}</span>'
             + (f'<span class="badge">{c.t("due")}: {esc(t["due"])}</span>' if t["due"] else "") + "</div>"
             for t in tasks) or f'<p class="path">{c.t("no_tasks")}</p>'
-        parts.append(f'<h2>{c.t("sec_tasks")}</h2><div class="grid">{cards}</div>')
+        side.append(f'<h2>{c.t("sec_tasks")}</h2><div class="stack">{cards}</div>')
     if f["receipts"] and receipts:
         ev = "".join(f'<div class="event"><small>{c.date(r["time"])} {r["time"]:%H:%M}</small><br>'
                      f'{inline(clip(r["summary"], 240))}</div>' for r in receipts[:6])
-        parts.append(f'<h2>{c.t("sec_recent")}</h2><div class="feed">{ev}</div>'
+        side.append(f'<h2>{c.t("sec_recent")}</h2><div class="feed">{ev}</div>'
                      f'<p class="path"><a href="/activity">{c.t("all_activity")}</a></p>')
+    if main_col and side:
+        parts.append(f'<div class="split"><div>{"".join(main_col)}</div>'
+                     f'<aside aria-label="{esc(c.t("aside_label"))}">{"".join(side)}</aside></div>')
+    else:
+        parts.extend(main_col + side)
     return 200, layout(c, c.t("nav_summary"), f"<h1>{esc(c.cfg['dashboard']['title'])}</h1>" + "".join(parts), "/")
 
 
@@ -205,7 +247,10 @@ def page_pipeline(c: Ctx) -> tuple[int, str]:
     head = "".join(f"<th>{esc(s)}</th>" for s in stages)
     rows = ""
     for i in items:
-        cells = "".join(f'<td class="{"ok" if d else "no"}">{"●" if d else "○"}</td>' for d in i["done"])
+        cells = "".join(
+            f'<td class="{"ok" if d else "no"}" title="{esc(s)}: {c.t("stage_yes" if d else "stage_no")}">'
+            f'<span aria-hidden="true">{"●" if d else "○"}</span><span class="sr">{c.t("stage_yes" if d else "stage_no")}</span></td>'
+            for s, d in zip(stages, i["done"]))
         if i["published"] and i["published"].startswith("http"):
             st = f'<a class="badge g" href="{esc(i["published"])}" target="_blank" rel="noopener noreferrer">{c.t("published")}</a>'
         elif i["published"]:
@@ -219,7 +264,7 @@ def page_pipeline(c: Ctx) -> tuple[int, str]:
             f'<th>{c.t("th_status")}</th></tr></thead><tbody>{rows}</tbody></table></div>'
             f'<p class="path">{c.t("pipeline_legend")}</p>')
     if c.feat["schedule"]:
-        body += f'<h2>{c.t("sec_schedule")}</h2>' + table(c.v.schedule())
+        body += f'<h2>{c.t("sec_schedule")}</h2>' + table(c.v.schedule(), "schedule")
     return 200, layout(c, title, body, "/pipeline")
 
 
@@ -253,7 +298,7 @@ def page_activity(c: Ctx) -> tuple[int, str]:
     html += "</div>" if day else ""
     title = f'{c.t("activity")} · {project}' if project else c.t("activity")
     return 200, layout(c, title, f'<h1>{esc(title)}</h1><div class="filter">{flt}</div>'
-                       f'<p class="path">{c.t("records", n=len(rs))}</p>{html}', "/activity")
+                       f'<p class="path">{c.t("records", n=len(rs))}</p>{html}', "/activity", narrow=True)
 
 
 def page_note(c: Ctx) -> tuple[int, str]:
@@ -270,7 +315,7 @@ def page_note(c: Ctx) -> tuple[int, str]:
     feed = (f' · <a href="/activity?project={quote(project)}">{c.t("project_activity")}</a>'
             if project and c.feat["receipts"] else "")
     return 200, layout(c, p.stem, f'<div class="path">{crumb}{esc(p.name)}{feed}</div>'
-                       f'<div class="note">{render(c.v.read(p))}</div>')
+                       f'<div class="note">{render(c.v.read(p))}</div>', narrow=True)
 
 
 def page_folder(c: Ctx) -> tuple[int, str]:
@@ -286,7 +331,7 @@ def page_folder(c: Ctx) -> tuple[int, str]:
             continue
         r = c.v.rel(o)
         if o.is_dir():
-            cards += f'<div class="card"><h3>▸ <a href="{esc(folder_link(r))}">{esc(o.name)}</a></h3></div>'
+            cards += f'<div class="card"><h3>{FOLDER_SVG}<a href="{esc(folder_link(r))}">{esc(o.name)}</a></h3></div>'
         elif o.suffix.lower() == ".md":
             first = next((s[2:] for s in c.v.read(o).splitlines() if s.startswith("# ")), "")
             cards += f'<div class="card"><h3><a href="{esc(note_link(r))}">{esc(o.stem)}</a></h3><p>{esc(first)}</p></div>'
